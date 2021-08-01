@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://pocs.digitalpages.com.br'
+  baseURL: 'https://pocs.digitalpages.com.br'
 })
 
 export default api
