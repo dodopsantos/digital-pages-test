@@ -1,31 +1,48 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import FruitContainer from './styles'
+import api from '../../services/api'
 import NavBar from '../../components/NavBar'
 
-function Fruit({ location }) {
-  const [data] = useState(location.state.item)
+function Fruit() {
+  const [info, setInfo] = useState([])
+  const { id } = useParams()
+
+  async function getAllApiData() {
+    const { data } = await api.get('/mock/api/fruits-api/fruits.json')
+    setInfo(data)
+  }
+
+  useEffect(() => {
+    getAllApiData()
+  }, [])
+
+  const filterFruit = info.filter(
+    fruit => fruit.name.toLowerCase() === id.toLowerCase()
+  )
 
   return (
     <>
       <NavBar />
-      <FruitContainer>
-        <div className="card">
-          <img src={data.photo} alt="Imagem" />
-          <div className="content">
-            <h1>{data.name}</h1>
-            <p>Calorias: {data.calories}</p>
-            <p>Proteína: {data.protein}</p>
-            <p>Carboidrato: {data.carbohydrates}</p>
-            <p>Fibra: {data.fiber}</p>
-            <p>Gordura: {data.blubber}</p>
-            <p>Porção: {data.portion}</p>
-            <div className="btn">
-              <Link to="/">Voltar</Link>
+      {filterFruit[0] && (
+        <FruitContainer>
+          <div className="card">
+            <img src={filterFruit[0]?.photo} alt="Imagem" />
+            <div className="content">
+              <h1>{filterFruit[0]?.name}</h1>
+              <p>Calorias: {filterFruit[0]?.calories}</p>
+              <p>Proteína: {filterFruit[0]?.protein}</p>
+              <p>Carboidrato: {filterFruit[0]?.carbohydrates}</p>
+              <p>Fibra: {filterFruit[0]?.fiber}</p>
+              <p>Gordura: {filterFruit[0]?.blubber}</p>
+              <p>Porção: {filterFruit[0]?.portion}</p>
+              <div className="btn">
+                <Link to="/">Voltar</Link>
+              </div>
             </div>
           </div>
-        </div>
-      </FruitContainer>
+        </FruitContainer>
+      )}
     </>
   )
 }

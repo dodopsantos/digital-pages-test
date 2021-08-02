@@ -38,8 +38,7 @@ function Home() {
               title={item.name}
               image={item.photo}
               to={{
-                pathname: '/fruta',
-                state: { item }
+                pathname: `/fruta/${item.name}`
               }}
             >
               <p>Calorias: {item.calories}</p>
